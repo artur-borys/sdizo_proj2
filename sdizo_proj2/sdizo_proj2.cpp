@@ -5,21 +5,27 @@
 #include <iostream>
 #include <cstdlib>
 #include "IncidenceMatrix.h"
+#include "AdjacencyList.h"
+#include "mst.h"
 
 using namespace std;
 
 int main()
 {
-	IncidenceMatrix m(10, 10);
-	m.createEdge(0, 1, 2, true);
-	m.createEdge(5, 0, 3, true);
-	vector<int> n = m.getNeighbours(0, false);
-	for (size_t i = 0; i < n.size(); i++) {
-		cout << n[i] << endl;
-	}
-	cout << m.getCapacity(0, 5) << endl;
-	cout << m.getCapacity(1) << endl;
+	IncidenceMatrix m(5, false);
+	//AdjacencyList m(5, false);
+	m.createEdge(0, 1, 1);
+	m.createEdge(0, 2, 3);
+	m.createEdge(1, 2, 3);
+	m.createEdge(1, 3, 6);
+	m.createEdge(2, 3, 4);
+	m.createEdge(2, 4, 2);
+	m.createEdge(3, 4, 5);
+	cout << "Graf: " << endl;
 	m.print();
+	cout << "MST: " << endl;
+	IncidenceMatrix mst = kruskal_matrix(&m, true);
+	//AdjacencyList mst = prim_list(&m, 0, true);
 	return 0;
 }
 

@@ -1,47 +1,50 @@
 #include "pch.h"
 #include "IncidenceMatrix.h"
 
-IncidenceMatrix::IncidenceMatrix(size_t v, size_t e)
+IncidenceMatrix::IncidenceMatrix(size_t v, bool directed)
 {
-	this->e = e;
 	this->v = v;
-	this->matrix.resize(e);
+	this->directed = directed;
+}
+
+IncidenceMatrix::IncidenceMatrix(size_t v, size_t e, bool directed)
+{
+	this->v = v;
+	this->e = e;
+	matrix.resize(e);
+	for (auto it = matrix.begin(); it != matrix.end(); ++it) {
+		it->resize(v);
+	}
+}
+
+void IncidenceMatrix::createEdge(size_t v1, size_t v2, int capacity)
+{
+	vector<int> edge((size_t) this->v);
+	matrix.push_back(edge);
+	matrix[e][v1] = capacity;
+	if (!directed) {
+		matrix[e][v2] = capacity;
+	}
+	else {
+		matrix[e][v2] = -capacity;
+	}
+	
+	this->e++;
+}
+
+vector<size_t> IncidenceMatrix::getNeighbours(size_t v)
+{
+	vector<size_t> neighbours;
 	for (size_t i = 0; i < this->e; i++) {
-		this->matrix.at(i).resize(v);
-	}
-}
-
-void IncidenceMatrix::createEdge(size_t v1, size_t v2, int capacity, bool directed)
-{
-	if (this->current_e == this->e) {
-		cout << "Nie mozna dodac wiecej krawedzi" << endl;
-		return;
-	}
-	vector<int> vertices;
-	vertices.resize(this->v);
-	vertices.at(v1) = capacity;
-	vertices.at(v2) = capacity;
-	if (directed) {
-		vertices.at(v2) = -vertices.at(v2);
-	}
-
-	this->matrix.at(this->current_e) = vertices;
-	this->current_e++;
-}
-
-vector<int> IncidenceMatrix::getNeighbours(size_t v, bool directed)
-{
-	vector<int> neighbours;
-	for (size_t i = 0; i < this->current_e; i++) {
 		if (this->matrix[i][v] != 0) {
 			if (directed) {
-				if (this->matrix.at(i).at(v) < 0) {
+				if (this->matrix[i][v] < 0) {
 					return neighbours;
 				}
 			}
 			for (size_t j = 0; j < this->v; j++) {
 				if (j != v) {
-					if (this->matrix.at(i).at(j) != 0) {
+					if (this->matrix[i][v] != 0) {
 						neighbours.push_back(j);
 					}
 				}
@@ -53,9 +56,14 @@ vector<int> IncidenceMatrix::getNeighbours(size_t v, bool directed)
 
 int IncidenceMatrix::getCapacity(size_t v1, size_t v2)
 {
-	for (size_t i = 0; i < this->current_e; i++) {
-		if (this->matrix.at(i).at(v1) != 0 && this->matrix.at(i).at(v2) != 0) {
-			return abs(matrix.at(i).at(v1));
+	for (size_t i = 0; i < e; i++) {
+		if (matrix[i][v1] != 0 && matrix[i][v2] != 0) {
+			if (matrix[i][v1] > 0) {
+				return matrix[i][v1];
+			}
+			else if (!directed && matrix[i][v1] < 0) {
+				return abs(matrix[i][v1]);
+			}
 		}
 	}
 	return 0;
@@ -69,6 +77,21 @@ int IncidenceMatrix::getCapacity(size_t e)
 		}
 	}
 	return 0;
+}
+
+size_t IncidenceMatrix::getVerticiesCount()
+{
+	return v;
+}
+
+size_t IncidenceMatrix::getEdgesCount()
+{
+	return e;
+}
+
+vector<vector<int>>* IncidenceMatrix::getMatrix()
+{
+	return &this->matrix;
 }
 
 void IncidenceMatrix::print()
@@ -94,6 +117,7 @@ void IncidenceMatrix::print()
 			cout << this->matrix.at(j).at(i);
 		}
 	}
+	cout << endl;
 }
 
 IncidenceMatrix::~IncidenceMatrix()
