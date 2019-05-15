@@ -122,4 +122,5 @@ void IncidenceMatrix::print()
 
 IncidenceMatrix::~IncidenceMatrix()
 {
+	matrix.clear();
 }

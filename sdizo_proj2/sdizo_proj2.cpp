@@ -13,7 +13,7 @@ using namespace std;
 int main()
 {
 	IncidenceMatrix m(5, false);
-	//AdjacencyList m(5, false);
+	AdjacencyList l(5, false);
 	m.createEdge(0, 1, 1);
 	m.createEdge(0, 2, 3);
 	m.createEdge(1, 2, 3);
@@ -21,12 +21,25 @@ int main()
 	m.createEdge(2, 3, 4);
 	m.createEdge(2, 4, 2);
 	m.createEdge(3, 4, 5);
-	cout << "Graf: " << endl;
+	l.createEdge(0, 1, 1);
+	l.createEdge(0, 2, 3);
+	l.createEdge(1, 2, 3);
+	l.createEdge(1, 3, 6);
+	l.createEdge(2, 3, 4);
+	l.createEdge(2, 4, 2);
+	l.createEdge(3, 4, 5);
+	cout << "Graf Macierzowo: " << endl;
 	m.print();
-	cout << "MST: " << endl;
-	//IncidenceMatrix mst = prim_matrix(&m, 0, true);
-	IncidenceMatrix mst = kruskal_matrix(&m, true);
-	//AdjacencyList mst = prim_list(&m, 0, true);
+	cout << "Graf Listowo: " << endl;
+	l.print();
+	cout << "MST Prim Matrix: " << endl;
+	prim_matrix(&m, 0, true);
+	cout << "MST Kruskal Matrix: " << endl;
+	kruskal_matrix(&m, true);
+	cout << "MST Prim List: " << endl;
+	prim_list(&l, 0, true);
+	cout << "MST Kruskal List: " << endl;
+	kruskal_list(&l, true);
 	return 0;
 }
 
