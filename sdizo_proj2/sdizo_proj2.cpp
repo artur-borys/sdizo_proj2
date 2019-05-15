@@ -24,6 +24,7 @@ int main()
 	cout << "Graf: " << endl;
 	m.print();
 	cout << "MST: " << endl;
+	//IncidenceMatrix mst = prim_matrix(&m, 0, true);
 	IncidenceMatrix mst = kruskal_matrix(&m, true);
 	//AdjacencyList mst = prim_list(&m, 0, true);
 	return 0;
