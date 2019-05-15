@@ -3,10 +3,24 @@
 
 #include "pch.h"
 #include <iostream>
+#include <cstdlib>
+#include "IncidenceMatrix.h"
+
+using namespace std;
 
 int main()
 {
-    std::cout << "Hello World!\n"; 
+	IncidenceMatrix m(10, 10);
+	m.createEdge(0, 1, 2, true);
+	m.createEdge(5, 0, 3, true);
+	vector<int> n = m.getNeighbours(0, false);
+	for (size_t i = 0; i < n.size(); i++) {
+		cout << n[i] << endl;
+	}
+	cout << m.getCapacity(0, 5) << endl;
+	cout << m.getCapacity(1) << endl;
+	m.print();
+	return 0;
 }
 
 // Uruchomienie programu: Ctrl + F5 lub menu Debugowanie > Uruchom bez debugowania
