@@ -32,19 +32,19 @@ void IncidenceMatrix::createEdge(size_t v1, size_t v2, int capacity)
 	this->e++;
 }
 
-vector<size_t> IncidenceMatrix::getNeighbours(size_t v)
+vector<size_t> IncidenceMatrix::getNeighbours(size_t v_s)
 {
 	vector<size_t> neighbours;
 	for (size_t i = 0; i < this->e; i++) {
-		if (this->matrix[i][v] != 0) {
+		if (this->matrix[i][v_s] != 0) {
 			if (directed) {
-				if (this->matrix[i][v] < 0) {
-					return neighbours;
+				if (this->matrix[i][v_s] < 0) {
+					continue;
 				}
 			}
 			for (size_t j = 0; j < this->v; j++) {
-				if (j != v) {
-					if (this->matrix[i][v] != 0) {
+				if (j != v_s) {
+					if (this->matrix[i][j] != 0) {
 						neighbours.push_back(j);
 					}
 				}

@@ -7,11 +7,37 @@
 #include "IncidenceMatrix.h"
 #include "AdjacencyList.h"
 #include "mst.h"
+#include "spa.h"
 
 using namespace std;
 
 int main()
 {
+	IncidenceMatrix m2(6, true);
+	AdjacencyList l2(6, true);
+	m2.createEdge(0, 1, 5);
+	m2.createEdge(0, 5, 2);
+	m2.createEdge(1, 2, 3);
+	m2.createEdge(3, 1, 1);
+	m2.createEdge(3, 4, 3);
+	m2.createEdge(4, 2, 3);
+	m2.createEdge(5, 3, 1);
+	m2.createEdge(5, 4, 4);
+	l2.createEdge(0, 1, 5);
+	l2.createEdge(0, 5, 2);
+	l2.createEdge(1, 2, 3);
+	l2.createEdge(3, 1, 1);
+	l2.createEdge(3, 4, 3);
+	l2.createEdge(4, 2, 3);
+	l2.createEdge(5, 3, 1);
+	l2.createEdge(5, 4, 4);
+	dijkstra(&m2, 0);
+	cout << endl;
+	dijkstra(&l2, 0);
+	cout << endl;
+	bellman_ford(&m2, 0);
+	cout << endl;
+	bellman_ford(&l2, 0);
 	IncidenceMatrix m(5, false);
 	AdjacencyList l(5, false);
 	m.createEdge(0, 1, 1);
@@ -33,13 +59,13 @@ int main()
 	cout << "Graf Listowo: " << endl;
 	l.print();
 	cout << "MST Prim Matrix: " << endl;
-	prim_matrix(&m, 0, true);
+	prim(&m, 0, true);
 	cout << "MST Kruskal Matrix: " << endl;
-	kruskal_matrix(&m, true);
+	kruskal(&m, true);
 	cout << "MST Prim List: " << endl;
-	prim_list(&l, 0, true);
+	prim(&l, 0, true);
 	cout << "MST Kruskal List: " << endl;
-	kruskal_list(&l, true);
+	kruskal(&l, true);
 	return 0;
 }
 

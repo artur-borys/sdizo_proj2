@@ -20,7 +20,7 @@ public:
 	}
 };
 
-IncidenceMatrix prim_matrix(IncidenceMatrix *G, size_t v, bool show_results = false) {
+IncidenceMatrix prim(IncidenceMatrix *G, size_t v, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	vector<bool> visited;
 	size_t n = G->getVerticiesCount();
@@ -58,7 +58,7 @@ IncidenceMatrix prim_matrix(IncidenceMatrix *G, size_t v, bool show_results = fa
 	return T;
 }
 
-AdjacencyList prim_list(AdjacencyList *G, size_t v, bool show_results = false) {
+AdjacencyList prim(AdjacencyList *G, size_t v, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	vector<bool> visited;
 	size_t n = G->getVerticiesCount();
@@ -96,7 +96,7 @@ AdjacencyList prim_list(AdjacencyList *G, size_t v, bool show_results = false) {
 	return T;
 }
 
-IncidenceMatrix kruskal_matrix(IncidenceMatrix *G, bool show_results = false) {
+IncidenceMatrix kruskal(IncidenceMatrix *G, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	size_t n = G->getVerticiesCount();
 	Sets Z(n);
@@ -131,7 +131,7 @@ IncidenceMatrix kruskal_matrix(IncidenceMatrix *G, bool show_results = false) {
 	return T;
 }
 
-AdjacencyList kruskal_list(AdjacencyList *G, bool show_results = false) {
+AdjacencyList kruskal(AdjacencyList *G, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	size_t n = G->getVerticiesCount();
 	Sets Z(n);

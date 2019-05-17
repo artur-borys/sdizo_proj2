@@ -156,6 +156,7 @@
     <ClInclude Include="mst.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Sets.h" />
+    <ClInclude Include="spa.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdjacencyList.cpp" />
@@ -168,6 +169,7 @@
     </ClCompile>
     <ClCompile Include="sdizo_proj2.cpp" />
     <ClCompile Include="Sets.cpp" />
+    <ClCompile Include="spa.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
