@@ -1,6 +1,7 @@
 #pragma once
 #include "IncidenceMatrix.h"
 #include "AdjacencyList.h"
+#include "czas.h"
 #include <vector>
 #include <queue>
 
@@ -21,7 +22,7 @@ public:
 	bool empty();
 };
 
-void dijkstra(IncidenceMatrix *G, size_t v);
-void dijkstra(AdjacencyList *G, size_t v);
-void bellman_ford(IncidenceMatrix *G, size_t v);
-void bellman_ford(AdjacencyList *G, size_t v);
+void dijkstra(IncidenceMatrix *G, size_t v, bool show_results = false);
+void dijkstra(AdjacencyList *G, size_t v, bool show_results = false);
+void bellman_ford(IncidenceMatrix *G, size_t v, bool show_results = false);
+void bellman_ford(AdjacencyList *G, size_t v, bool show_results = false);

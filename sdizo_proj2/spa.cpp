@@ -1,21 +1,21 @@
 #include "pch.h"
 #include "spa.h"
 
-void dijkstra(IncidenceMatrix *G, size_t v)
+void dijkstra(IncidenceMatrix *G, size_t v, bool show_results)
 {
 	vector<size_t> d;
 	vector<int> p;
+	Czas t;
 	MyQueue Q(&d);
 	size_t n = G->getVerticiesCount();
-	d.resize(n);
-	p.resize(n);
+	d.resize(n, INT_MAX);
+	p.resize(n, -1);
 	for (size_t i = 0; i < G->getVerticiesCount(); i++) {
-		d[i] = INT_MAX;
-		p[i] = -1;
 		Q.insert(i);
 	}
 	d[v] = 0;
 	Q.buildFloyd();
+	t.start();
 	while (!Q.empty()) {
 		size_t u = Q.pop();
 		vector<size_t> neighbours = G->getNeighbours(u);
@@ -27,24 +27,31 @@ void dijkstra(IncidenceMatrix *G, size_t v)
 			}
 		}
 	}
-	for (size_t i = 0; i < n; i++) {
-		if (i == v)
-			continue;
-		size_t j = i;
-		cout << v << "-" << i << ": ";
-		while (j != v) {
-			cout << j << "<=";
-			j = p[j];
+	t.stop();
+	if (show_results) {
+		for (size_t i = 0; i < n; i++) {
+			if (i == v)
+				continue;
+			size_t j = i;
+			cout << v << "-" << i << ": ";
+			while (j != v) {
+				cout << j << "<=";
+				j = p[j];
+			}
+			cout << v << ", d=" << d[i] << endl;
 		}
-		cout << v << ", d=" << d[i] << endl;
+		cout << "Czas wykonania: ";
+		t.printResult();
+		cout << endl;
 	}
 	return;
 }
 
-void dijkstra(AdjacencyList *G, size_t v)
+void dijkstra(AdjacencyList *G, size_t v, bool show_results)
 {
 	vector<size_t> d;
 	vector<int> p;
+	Czas t;
 	MyQueue Q(&d);
 	size_t n = G->getVerticiesCount();
 	d.resize(n);
@@ -56,6 +63,7 @@ void dijkstra(AdjacencyList *G, size_t v)
 	}
 	d[v] = 0;
 	Q.buildFloyd();
+	t.start();
 	while (!Q.empty()) {
 		size_t u = Q.pop();
 		list<listElem> neighbours = G->getNeighbours(u);
@@ -67,30 +75,38 @@ void dijkstra(AdjacencyList *G, size_t v)
 			}
 		}
 	}
-	for (size_t i = 0; i < n; i++) {
-		if (i == v)
-			continue;
-		size_t j = i;
-		cout << v << "-" << i << ": ";
-		while (j != v) {
-			cout << j << "<=";
-			j = p[j];
+	t.stop();
+	if (show_results) {
+		for (size_t i = 0; i < n; i++) {
+			if (i == v)
+				continue;
+			size_t j = i;
+			cout << v << "-" << i << ": ";
+			while (j != v) {
+				cout << j << "<=";
+				j = p[j];
+			}
+			cout << v << ", d=" << d[i] << endl;
 		}
-		cout << v << ", d=" << d[i] << endl;
+		cout << "Czas wykonania: ";
+		t.printResult();
+		cout << endl;
 	}
 	return;
 }
 
-void bellman_ford(IncidenceMatrix * G, size_t v)
+void bellman_ford(IncidenceMatrix * G, size_t v, bool show_results)
 {
 	vector<size_t> d;
 	vector<int> p;
+	Czas t;
 	size_t n = G->getVerticiesCount();
 	d.resize(n, INT_MAX);
 	p.resize(n, -1);
 	d[v] = 0;
 	bool test;
 	bool result = true;
+	t.start();
 	for (size_t i = 0; i < n; i++) {
 		test = true;
 		for (size_t u = 0; u < n; u++) {
@@ -116,31 +132,39 @@ void bellman_ford(IncidenceMatrix * G, size_t v)
 			}
 		}
 	}
+	t.stop();
 	if (result) {
-		for (size_t i = 0; i < n; i++) {
-			if (i == v)
-				continue;
-			size_t j = i;
-			cout << v << "-" << i << ": ";
-			while (j != v) {
-				cout << j << "<=";
-				j = p[j];
+		if (show_results) {
+			for (size_t i = 0; i < n; i++) {
+				if (i == v)
+					continue;
+				size_t j = i;
+				cout << v << "-" << i << ": ";
+				while (j != v) {
+					cout << j << "<=";
+					j = p[j];
+				}
+				cout << v << ", d=" << d[i] << endl;
 			}
-			cout << v << ", d=" << d[i] << endl;
+			cout << "Czas wykonania: ";
+			t.printResult();
+			cout << endl;
 		}
 	}
 }
 
-void bellman_ford(AdjacencyList * G, size_t v)
+void bellman_ford(AdjacencyList * G, size_t v, bool show_results)
 {
 	vector<size_t> d;
 	vector<int> p;
+	Czas t;
 	size_t n = G->getVerticiesCount();
 	d.resize(n, INT_MAX);
 	p.resize(n, -1);
 	d[v] = 0;
 	bool test;
 	bool result = true;
+	t.start();
 	for (size_t i = 0; i < n; i++) {
 		test = true;
 		for (size_t u = 0; u < n; u++) {
@@ -166,17 +190,23 @@ void bellman_ford(AdjacencyList * G, size_t v)
 			}
 		}
 	}
+	t.stop();
 	if (result) {
-		for (size_t i = 0; i < n; i++) {
-			if (i == v)
-				continue;
-			size_t j = i;
-			cout << v << "-" << i << ": ";
-			while (j != v) {
-				cout << j << "<=";
-				j = p[j];
+		if (show_results) {
+			for (size_t i = 0; i < n; i++) {
+				if (i == v)
+					continue;
+				size_t j = i;
+				cout << v << "-" << i << ": ";
+				while (j != v) {
+					cout << j << "<=";
+					j = p[j];
+				}
+				cout << v << ", d=" << d[i] << endl;
 			}
-			cout << v << ", d=" << d[i] << endl;
+			cout << "Czas wykonania: ";
+			t.printResult();
+			cout << endl;
 		}
 	}
 }
@@ -246,8 +276,8 @@ void MyQueue::fixDown(size_t s)
 
 void MyQueue::buildFloyd()
 {
-	for (int i = (verticies.size() - 2) / 2; i >= 0; --i) {
-		fixDown(i);
+	for (int i = ((int)verticies.size() - 2) / 2; i >= 0; --i) {
+		fixDown((size_t) i);
 	}
 }
 

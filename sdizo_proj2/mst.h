@@ -5,6 +5,7 @@
 #include "IncidenceMatrix.h"
 #include <queue>
 #include "Sets.h"
+#include "czas.h"
 
 using namespace std;
 
@@ -23,11 +24,13 @@ public:
 IncidenceMatrix prim(IncidenceMatrix *G, size_t v, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	vector<bool> visited;
+	Czas t;
 	size_t n = G->getVerticiesCount();
 	visited.resize(n);
 	IncidenceMatrix T(n, false);
 	visited[v] = true;
 	int sum = 0;
+	t.start();
 	for (size_t i = 1; i < n; i++) {
 		vector<size_t> neighbours = G->getNeighbours(v);
 		for (auto it = neighbours.begin(); it != neighbours.end(); ++it) {
@@ -51,9 +54,13 @@ IncidenceMatrix prim(IncidenceMatrix *G, size_t v, bool show_results = false) {
 		sum += e.capacity;
 		v = e.v2;
 	}
+	t.stop();
 	if (show_results) {
 		T.print();
 		cout << "Suma wag krawedzi: " << sum << endl;
+		cout << "Czas wykonania: ";
+		t.printResult();
+		cout << endl;
 	}
 	return T;
 }
@@ -61,11 +68,13 @@ IncidenceMatrix prim(IncidenceMatrix *G, size_t v, bool show_results = false) {
 AdjacencyList prim(AdjacencyList *G, size_t v, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	vector<bool> visited;
+	Czas t;
 	size_t n = G->getVerticiesCount();
 	visited.resize(n);
 	AdjacencyList T(n, false);
 	visited[v] = true;
 	int sum = 0;
+	t.start();
 	for (size_t i = 1; i < n; i++) {
 		list<listElem> neighbours = G->getNeighbours(v);
 		for (auto it = neighbours.begin(); it != neighbours.end(); ++it) {
@@ -89,9 +98,13 @@ AdjacencyList prim(AdjacencyList *G, size_t v, bool show_results = false) {
 		sum += e.capacity;
 		v = e.v2;
 	}
+	t.stop();
 	if (show_results) {
 		T.print();
 		cout << "Suma wag krawedzi: " << sum << endl;
+		cout << "Czas wykonania: ";
+		t.printResult();
+		cout << endl;
 	}
 	return T;
 }
@@ -100,9 +113,11 @@ IncidenceMatrix kruskal(IncidenceMatrix *G, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	size_t n = G->getVerticiesCount();
 	Sets Z(n);
+	Czas t;
 	IncidenceMatrix T(n, false);
 	Edge e;
 	int sum = 0;
+	t.start();
 	for (size_t v = 0; v < n; v++) {
 		Z.makeSet(v);
 		vector<size_t> neighbours = G->getNeighbours(v);
@@ -124,9 +139,13 @@ IncidenceMatrix kruskal(IncidenceMatrix *G, bool show_results = false) {
 		Z.unionSets(e.v1, e.v2);
 		sum += e.capacity;
 	}
+	t.stop();
 	if (show_results) {
 		T.print();
 		cout << "Suma wag krawedzi: " << sum << endl;
+		cout << "Czas wykonania: ";
+		t.printResult();
+		cout << endl;
 	}
 	return T;
 }
@@ -135,9 +154,11 @@ AdjacencyList kruskal(AdjacencyList *G, bool show_results = false) {
 	priority_queue<Edge, vector<Edge>, keyComparison> Q;
 	size_t n = G->getVerticiesCount();
 	Sets Z(n);
+	Czas t;
 	AdjacencyList T(n, false);
 	Edge e;
 	int sum = 0;
+	t.start();
 	for (size_t v = 0; v < n; v++) {
 		Z.makeSet(v);
 		list<listElem> neighbours = G->getNeighbours(v);
@@ -159,9 +180,13 @@ AdjacencyList kruskal(AdjacencyList *G, bool show_results = false) {
 		Z.unionSets(e.v1, e.v2);
 		sum += e.capacity;
 	}
+	t.stop();
 	if (show_results) {
 		T.print();
 		cout << "Suma wag krawedzi: " << sum << endl;
+		cout << "Czas wykonania: ";
+		t.printResult();
+		cout << endl;
 	}
 	return T;
 }

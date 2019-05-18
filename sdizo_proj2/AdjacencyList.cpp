@@ -25,6 +25,7 @@ void AdjacencyList::createEdge(size_t v1, size_t v2, int capacity)
 		v2_neighbour.capacity = capacity;
 		verticies[v2].push_back(v2_neighbour);
 	}
+	this->e++;
 }
 
 int AdjacencyList::getCapacity(size_t v1, size_t v2)
@@ -44,6 +45,38 @@ list<listElem> AdjacencyList::getNeighbours(size_t v) {
 size_t AdjacencyList::getVerticiesCount()
 {
 	return v;
+}
+
+double AdjacencyList::getDensity()
+{
+	return (double)e / (v*(v - 1) / 2);
+}
+
+AdjacencyList AdjacencyList::readFromFile(string path, bool directed)
+{
+	fstream f;
+	size_t e, v, v1, v2;
+	int capacity;
+	string line;
+	stringstream str_stream;
+	f.open(path);
+	if (f.is_open()) {
+		getline(f, line);
+		str_stream = stringstream(line);
+		str_stream >> v >> e;
+		AdjacencyList G(v, directed);
+		while (getline(f, line)) {
+			str_stream = stringstream(line);
+			str_stream >> v1 >> v2 >> capacity;
+			G.createEdge(v1, v2, capacity);
+		}
+		return G;
+	}
+	else {
+		cout << "Blad poczas odczytywania pliku" << endl;
+		return AdjacencyList(0, false);
+	}
+	f.close();
 }
 
 void AdjacencyList::print()

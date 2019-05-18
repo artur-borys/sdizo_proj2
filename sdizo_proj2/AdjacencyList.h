@@ -3,6 +3,8 @@
 #include <vector>
 #include <list>
 #include <iomanip>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -14,7 +16,7 @@ struct listElem {
 class AdjacencyList
 {
 private:
-	size_t v;
+	size_t v, e = 0;
 	vector<list<listElem>> verticies;
 	bool directed;
 public:
@@ -24,6 +26,8 @@ public:
 	int getCapacity(size_t v1, size_t v2);
 	list<listElem> getNeighbours(size_t v);
 	size_t getVerticiesCount();
+	double getDensity();
+	static AdjacencyList readFromFile(string path, bool directed);
 	void print();
 	~AdjacencyList();
 };

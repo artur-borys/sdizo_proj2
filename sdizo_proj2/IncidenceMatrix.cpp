@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "IncidenceMatrix.h"
 
+IncidenceMatrix::IncidenceMatrix()
+{
+}
+
 IncidenceMatrix::IncidenceMatrix(size_t v, bool directed)
 {
 	this->v = v;
@@ -79,6 +83,11 @@ int IncidenceMatrix::getCapacity(size_t e)
 	return 0;
 }
 
+void IncidenceMatrix::reserveEdges(size_t e)
+{
+	matrix.reserve(e);
+}
+
 size_t IncidenceMatrix::getVerticiesCount()
 {
 	return v;
@@ -97,6 +106,34 @@ vector<vector<int>>* IncidenceMatrix::getMatrix()
 double IncidenceMatrix::getDensity()
 {
 	return (double)e/(v*(v - 1)/2);
+}
+
+IncidenceMatrix IncidenceMatrix::readFromFile(string path, bool directed)
+{
+	fstream f;
+	size_t e, v, v1, v2;
+	int capacity;
+	string line;
+	stringstream str_stream;
+	f.open(path);
+	if (f.is_open()) {
+		getline(f, line);
+		str_stream = stringstream(line);
+		str_stream >> v >> e;
+		IncidenceMatrix G(v, directed);
+		G.reserveEdges(e);
+		while (getline(f, line)) {
+			str_stream = stringstream(line);
+			str_stream >> v1 >> v2 >> capacity;
+			G.createEdge(v1, v2, capacity);
+		}
+		return G;
+	}
+	else {
+		cout << "Blad poczas odczytywania pliku" << endl;
+		return IncidenceMatrix(0, false);
+	}
+	f.close();
 }
 
 void IncidenceMatrix::print()

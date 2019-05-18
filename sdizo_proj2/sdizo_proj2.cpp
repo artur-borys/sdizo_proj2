@@ -1,63 +1,315 @@
 ﻿// sdizo_proj2.cpp : Ten plik zawiera funkcję „main”. W nim rozpoczyna się i kończy wykonywanie programu.
 //
 
+#pragma once
 #include "pch.h"
 #include <iostream>
+#include <fstream>
 #include <cstdlib>
 #include "IncidenceMatrix.h"
 #include "AdjacencyList.h"
 #include "mst.h"
 #include "spa.h"
 #include "utils.h"
+#include "czas.h"
 
 using namespace std;
 
+void checkMatrix();
+void checkList();
+void clearConsole();
+void pause();
+void runTests();
+
+void menuCheck() {
+	string warning;
+	int opcja;
+	bool koniec = false;
+	while (!koniec) {
+		clearConsole();
+		if (!warning.empty()) {
+			cout << warning << endl;
+			warning = "";
+		}
+		cout << "Wybierz reprezentacje: " << endl;
+		cout << "1. Macierzowa" << endl;
+		cout << "2. Listowa" << endl;
+		cout << "0. Powrot" << endl;
+		cout << "> ";
+		cin >> opcja;
+		if (opcja == 1) {
+			checkMatrix();
+		}
+		else if (opcja == 2) {
+			checkList();
+		}
+		else if (opcja == 0) {
+			koniec = true;
+		}
+		else {
+			warning = "Nie wybrano opcji z listy!";
+		}
+	}
+}
+
+void checkMatrix() {
+	string warning, graphPath;
+	IncidenceMatrix Gd, Gn;
+	int opcja;
+	bool koniec = false;
+	while (!koniec) {
+		clearConsole();
+		if (!warning.empty()) {
+			cout << warning << endl;
+			warning = "";
+		}
+		cout << "Wybierz reprezentacje: " << endl;
+		cout << "1. Generuj losowy graf do pliku" << endl;
+		cout << "2. Wczytaj graf z pliku" << endl;
+		cout << "3. Wyswietl" << endl;
+		cout << "4. Algorytmy MST" << endl;
+		cout << "5. Algorytmy najkrotszej sciezki" << endl;
+		cout << "0. Powrot" << endl;
+		cout << "> ";
+		cin >> opcja;
+		if (opcja == 1) {
+			clearConsole();
+			string path;
+			size_t v;
+			double density;
+			cout << "Nazwa pliku: ";
+			cin >> path;
+			cout << "Ilosc wierzcholkow: ";
+			cin >> v;
+			cout << "Gestosc (w ulamku dziesietnym): ";
+			cin >> density;
+			randomGraph(path, v, density);
+		}
+		else if (opcja == 2) {
+			system("CLS");
+			cout << "Nazwa pliku: ";
+			cin >> graphPath;
+			Gd = IncidenceMatrix::readFromFile(graphPath, true);
+			Gn = IncidenceMatrix::readFromFile(graphPath, false);
+		}
+		else if (opcja == 3) {
+			clearConsole();
+			Gd.print();
+			pause();
+		}
+		else if (opcja == 4) {
+			clearConsole();
+			size_t s;
+			cout << "Wierzcholek startowy: ";
+			cin >> s;
+			cout << "Graf" << endl;
+			Gn.print();
+			cout << "Algorytm Prima" << endl;
+			prim(&Gn, s, true);
+			cout << "Algorytm Kruskala" << endl;
+			kruskal(&Gn, true);
+			pause();
+		}
+		else if (opcja == 5) {
+			clearConsole();
+			size_t s;
+			cout << "Wierzcholek startowy: ";
+			cin >> s;
+			cout << "Graf" << endl;
+			Gd.print();
+			cout << "Algorytm Dijkstry" << endl;
+			dijkstra(&Gd, s, true);
+			cout << "Algorytm Bellmana-Forda" << endl;
+			bellman_ford(&Gd, s, true);
+			pause();
+		}
+		else if (opcja == 0) {
+			break;
+		}
+		else {
+			warning = "Nie wybrano opcji z listy!";
+		}
+	}
+}
+
+void checkList()
+{
+	string warning, graphPath;
+	AdjacencyList Gd, Gn;
+	int opcja;
+	bool koniec = false;
+	while (!koniec) {
+		clearConsole();
+		if (!warning.empty()) {
+			cout << warning << endl;
+			warning = "";
+		}
+		cout << "Wybierz reprezentacje: " << endl;
+		cout << "1. Generuj losowy graf do pliku" << endl;
+		cout << "2. Wczytaj graf z pliku" << endl;
+		cout << "3. Wyswietl" << endl;
+		cout << "4. Algorytmy MST" << endl;
+		cout << "5. Algorytmy najkrotszej sciezki" << endl;
+		cout << "0. Powrot" << endl;
+		cout << "> ";
+		cin >> opcja;
+		if (opcja == 1) {
+			clearConsole();
+			string path;
+			size_t v;
+			double density;
+			cout << "Nazwa pliku: ";
+			cin >> path;
+			cout << "Ilosc wierzcholkow: ";
+			cin >> v;
+			cout << "Gestosc (w ulamku dziesietnym): ";
+			cin >> density;
+			randomGraph(path, v, density);
+		}
+		else if (opcja == 2) {
+			system("CLS");
+			cout << "Nazwa pliku: ";
+			cin >> graphPath;
+			Gd = AdjacencyList::readFromFile(graphPath, true);
+			Gn = AdjacencyList::readFromFile(graphPath, false);
+		}
+		else if (opcja == 3) {
+			clearConsole();
+			Gd.print();
+			pause();
+		}
+		else if (opcja == 4) {
+			clearConsole();
+			size_t s;
+			cout << "Wierzcholek startowy: ";
+			cin >> s;
+			cout << "Graf" << endl;
+			Gn.print();
+			cout << "Algorytm Prima" << endl;
+			prim(&Gn, s, true);
+			cout << "Algorytm Kruskala" << endl;
+			kruskal(&Gn, true);
+			pause();
+		}
+		else if (opcja == 5) {
+			clearConsole();
+			size_t s;
+			cout << "Wierzcholek startowy: ";
+			cin >> s;
+			cout << "Graf" << endl;
+			Gd.print();
+			cout << "Algorytm Dijkstry" << endl;
+			dijkstra(&Gd, s, true);
+			cout << "Algorytm Bellmana-Forda" << endl;
+			bellman_ford(&Gd, s, true);
+			pause();
+		}
+		else if (opcja == 0) {
+			break;
+		}
+		else {
+			warning = "Nie wybrano opcji z listy!";
+		}
+	}
+}
+
+void clearConsole()
+{
+	system("CLS");
+}
+
+void pause()
+{
+	system("PAUSE");
+}
+
+void runTests()
+{
+	Czas t;
+	size_t sizes[] = { 10, 20, 50, 100, 500 };
+	double densities[] = { 0.25, 0.5, 0.75, 0.99 };
+	size_t repeats = 100;
+	ofstream files[] = { ofstream("prim_m.txt"), ofstream("kruskal_m.txt"), ofstream("dijkstra_m.txt"), ofstream("bellman_m.txt") };
+	for (size_t size : sizes) {
+		for (double density : densities) {
+			double avg[4] = { 0 };
+			for (size_t i = 0; i < repeats; i++) {
+				IncidenceMatrix G = randomGraphMatrix(size, density, false);
+				t.start();
+				prim(&G, 0, false);
+				t.stop();
+				avg[0] = t.result();
+				t.start();
+				kruskal(&G, false);
+				t.stop();
+				avg[1] = t.result();
+				t.start();
+				dijkstra(&G, 0, false);
+				t.stop();
+				avg[2] = t.result();
+				t.start();
+				bellman_ford(&G, 0, false);
+				t.stop();
+				avg[3] = t.result();
+			}
+			for (size_t i = 0; i < 4; i++) {
+				avg[i] /= 100;
+				files[i] << avg[i] << " ";
+			}
+		}
+		for (size_t i = 0; i < 4; i++) {
+			files[i] << endl;
+		}
+	}
+}
+
 int main()
 {
-	IncidenceMatrix random_graph = randomGraphMatrix(5, 0.99);
-	random_graph.print();
+	int opcja;
+	string warning;
+	while (true) {
+		clearConsole();
+		if (!warning.empty()) {
+			cout << warning << endl;
+			warning = "";
+		}
+		cout << "Algorytmy Grafowe, SDiZO, Projekt nr 2" << endl;
+		cout << "Artur Borys 241323" << endl;
+		cout << "Maj 2019" << endl << endl;
+		cout << "1. Sprawdz poprawnosc algorytmow" << endl;
+		cout << "2. Wykonaj testy" << endl;
+		cout << "0. Wyjscie" << endl;
+		cout << "> ";
+		cin >> opcja;
+		switch (opcja) {
+		case 0:
+			return 0;
+			break;
+		case 1:
+			menuCheck();
+			break;
+		case 2:
+			runTests();
+			break;
+		default:
+			warning = "Nie wybrano opcji z listy!";
+			break;
+		}
+	}
 	return 0;
-	IncidenceMatrix m2(6, true);
-	AdjacencyList l2(6, true);
-	m2.createEdge(0, 1, 5);
-	m2.createEdge(0, 5, 2);
-	m2.createEdge(1, 2, 3);
-	m2.createEdge(3, 1, 1);
-	m2.createEdge(3, 4, 3);
-	m2.createEdge(4, 2, 3);
-	m2.createEdge(5, 3, 1);
-	m2.createEdge(5, 4, 4);
-	l2.createEdge(0, 1, 5);
-	l2.createEdge(0, 5, 2);
-	l2.createEdge(1, 2, 3);
-	l2.createEdge(3, 1, 1);
-	l2.createEdge(3, 4, 3);
-	l2.createEdge(4, 2, 3);
-	l2.createEdge(5, 3, 1);
-	l2.createEdge(5, 4, 4);
-	dijkstra(&m2, 0);
+	randomGraph("test.txt", 5, 0.5);
+	IncidenceMatrix m2 = IncidenceMatrix::readFromFile("test.txt", true);
+	m2.print();
+	AdjacencyList l2 = AdjacencyList::readFromFile("graph_spa.txt", true);
+	dijkstra(&m2, 0, true);
 	cout << endl;
-	dijkstra(&l2, 0);
+	dijkstra(&l2, 0, true);
 	cout << endl;
-	bellman_ford(&m2, 0);
+	bellman_ford(&m2, 0, true);
 	cout << endl;
-	bellman_ford(&l2, 0);
-	IncidenceMatrix m(5, false);
-	AdjacencyList l(5, false);
-	m.createEdge(0, 1, 1);
-	m.createEdge(0, 2, 3);
-	m.createEdge(1, 2, 3);
-	m.createEdge(1, 3, 6);
-	m.createEdge(2, 3, 4);
-	m.createEdge(2, 4, 2);
-	m.createEdge(3, 4, 5);
-	l.createEdge(0, 1, 1);
-	l.createEdge(0, 2, 3);
-	l.createEdge(1, 2, 3);
-	l.createEdge(1, 3, 6);
-	l.createEdge(2, 3, 4);
-	l.createEdge(2, 4, 2);
-	l.createEdge(3, 4, 5);
+	bellman_ford(&l2, 0, true);
+	IncidenceMatrix m = IncidenceMatrix::readFromFile("graph_mst.txt", false);
+	AdjacencyList l = AdjacencyList::readFromFile("graph_mst.txt", false);
 	cout << "Graf Macierzowo: " << endl;
 	m.print();
 	cout << "Graf Listowo: " << endl;
