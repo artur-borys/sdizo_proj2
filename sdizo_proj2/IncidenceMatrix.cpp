@@ -94,6 +94,11 @@ vector<vector<int>>* IncidenceMatrix::getMatrix()
 	return &this->matrix;
 }
 
+double IncidenceMatrix::getDensity()
+{
+	return (double)e/(v*(v - 1)/2);
+}
+
 void IncidenceMatrix::print()
 {
 	cout << setw(5);

@@ -8,11 +8,15 @@
 #include "AdjacencyList.h"
 #include "mst.h"
 #include "spa.h"
+#include "utils.h"
 
 using namespace std;
 
 int main()
 {
+	IncidenceMatrix random_graph = randomGraphMatrix(5, 0.99);
+	random_graph.print();
+	return 0;
 	IncidenceMatrix m2(6, true);
 	AdjacencyList l2(6, true);
 	m2.createEdge(0, 1, 5);

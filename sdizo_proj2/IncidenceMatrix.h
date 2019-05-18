@@ -22,6 +22,7 @@ public:
 	size_t getVerticiesCount();
 	size_t getEdgesCount();
 	vector<vector<int>>* getMatrix();
+	double getDensity();
 	void print();
 	~IncidenceMatrix();
 };
