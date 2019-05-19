@@ -226,13 +226,16 @@ void pause()
 void runTests()
 {
 	Czas t;
-	size_t sizes[] = { 10, 20, 50, 100, 500 };
+	size_t sizes[] = { 10, 20, 30, 40, 50 };
 	double densities[] = { 0.25, 0.5, 0.75, 0.99 };
 	size_t repeats = 100;
-	ofstream files[] = { ofstream("prim_m.txt"), ofstream("kruskal_m.txt"), ofstream("dijkstra_m.txt"), ofstream("bellman_m.txt") };
+	ofstream files_m[] = { ofstream("prim_m.txt"), ofstream("kruskal_m.txt"), ofstream("dijkstra_m.txt"), ofstream("bellman_m.txt") };
+	ofstream files_l[] = { ofstream("prim_l.txt"), ofstream("kruskal_l.txt"), ofstream("dijkstra_l.txt"), ofstream("bellman_l.txt") };
+	clearConsole();
 	for (size_t size : sizes) {
 		for (double density : densities) {
 			double avg[4] = { 0 };
+			cout << "Reprezentacja macierzowa, v=" << size << " gestosc=" << density << endl;
 			for (size_t i = 0; i < repeats; i++) {
 				IncidenceMatrix G = randomGraphMatrix(size, density, false);
 				t.start();
@@ -243,6 +246,7 @@ void runTests()
 				kruskal(&G, false);
 				t.stop();
 				avg[1] = t.result();
+				G = randomGraphMatrix(size, density, true);
 				t.start();
 				dijkstra(&G, 0, false);
 				t.stop();
@@ -254,13 +258,54 @@ void runTests()
 			}
 			for (size_t i = 0; i < 4; i++) {
 				avg[i] /= 100;
-				files[i] << avg[i] << " ";
+				files_m[i] << avg[i] << " ";
 			}
 		}
 		for (size_t i = 0; i < 4; i++) {
-			files[i] << endl;
+			files_m[i] << endl;
 		}
 	}
+	for (size_t i = 0; i < 4; i++) {
+		files_m[i].close();
+	}
+
+	for (size_t size : sizes) {
+		for (double density : densities) {
+			double avg[4] = { 0 };
+			cout << "Reprezentacja listowa, v=" << size << " gestosc=" << density << endl;
+			for (size_t i = 0; i < repeats; i++) {
+				AdjacencyList G = randomGraphList(size, density, false);
+				t.start();
+				prim(&G, 0, false);
+				t.stop();
+				avg[0] = t.result();
+				t.start();
+				kruskal(&G, false);
+				t.stop();
+				avg[1] = t.result();
+				G = randomGraphList(size, density, true);
+				t.start();
+				dijkstra(&G, 0, false);
+				t.stop();
+				avg[2] = t.result();
+				t.start();
+				bellman_ford(&G, 0, false);
+				t.stop();
+				avg[3] = t.result();
+			}
+			for (size_t i = 0; i < 4; i++) {
+				avg[i] /= 100;
+				files_l[i] << avg[i] << " ";
+			}
+		}
+		for (size_t i = 0; i < 4; i++) {
+			files_l[i] << endl;
+		}
+	}
+	for (size_t i = 0; i < 4; i++) {
+		files_l[i].close();
+	}
+	pause();
 }
 
 int main()
